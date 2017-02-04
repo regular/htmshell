@@ -1,9 +1,9 @@
 # htmshell
-A Desktop Environment/Graphical Shell for Linux implemented exclusively with web technologies. Desktop extensions/widgets and entire applications can be implemented in HTML and Javascript using any or no web framework, and can be distributed via npm. htmlshell (pronounce H.T.M shell) runs on top of [weston][1] and consists of the following components:
+A Desktop Environment/Graphical Shell for Linux implemented exclusively with web technologies. Desktop extensions/widgets and entire applications can be implemented in HTML and Javascript using any or no web framework, and can be distributed via npm. htmshell (pronounce H.T.M shell) runs on top of [weston][1] and consists of the following components:
 
 - [html-terminal][2] – a terminal emulatar that understands both, [classic VT100/ANSI escape sequences][10] and HTML/CSS/JavaScript (embedded in a non-standard escape sequence)
 - [domfs][3] – a bridge between UNIX and the DOM, implemented as a userland filesystem that runs in the browser and exposes the DOM elements as files and directories to the Linux kernel. (if that sounds crazy, that's because it is)
-- [remote-spawn][4] – invoke shell commands (parsed by bash) via websockets in a slightly more secure way than it sounds like!
+- [remote-spawn][4] – invoke shell commands (parsed by bash) via websockets in a slightly more secure way than what it sounds like!
 - A small collection of JavaScript modules that provide desktop widgets
   - [htmshell-mpc][5] A widget for controlling mpd[6], the music player daemon
   
@@ -22,7 +22,7 @@ The project is at an early proof-of-concept stage. (Two days old at the time of 
 
 When thinking about which desktop features I actually use in my day-to-day work as a developer and teacher, I realized it pretty much boils down to a terminal emulator and a web browser. Everything I do takes place in either one or the other.
 
-Thinking about it, a browser really is just another kind of terminal emulator. Both are being used to parse and interpret a program's output stream and present it in a human-friendly way, both take user input and provide it to the program. Terminal emulators interpret ANSI sequences and display colorful monospaced characters (the best kind of character) and send keystrokes to programs. Browsers on the other hand interpret html, css, svg and all kinds of binary formats, like png, jpeg, mp3, wav, ogg, pdf, and pretty much all video formats, and they send keyboard, mouse and touch events to programs. On top of that, they can render hardware-accelerated 3D graphics and compile [Open GL Shaders][13]. This feature set is so rich, you barely need anything else to implement a really nice desktop environment. The only thing that is missing, is a better integration between the browser and the terminal, or, in more general terms, between the browser and UNIX.
+Thinking about it, a browser really is just another kind of terminal emulator. Both are being used to parse and interpret a program's output stream and present it in a human-friendly way, both take user input and provide it to the program. Terminal emulators interpret ANSI sequences and display colorful monospaced characters (the best kind of character) and send keystrokes to programs. Browsers on the other hand interpret html, css, svg and all kinds of binary formats, like png, jpeg, mp3, wav, ogg, pdf, and pretty much all video formats, and they send keyboard, mouse and touch events to programs. On top of that, they can render hardware-accelerated 3D graphics and compile [Open GL Shaders][13]. This feature set is so rich, you barely need anything else to implement a really nice desktop environment. The only thing that is missing is a better integration between the browser and the terminal, or, in more general terms, between the browser and UNIX.
 
 ### Browser-backed system terminal
 
@@ -32,18 +32,18 @@ On my machine, [systemd][16] boots right into html-terminal and the standard Lin
 
 ### A UNIX-style DOM API (or "mad science part I" )
 
-Unix' design is beautiful. The entire system is represented in one unified tree. Your root file system in `/`, devices under `/dev`, running processes under `/proc`. This tree contains more than just files and directories. Simply by writing some data to the right file, you can do things like changing the brightness of your screen.
+Unix' design is beautiful. The entire system is represented in one unified tree. Your root file system in `/`, devices under `/dev`, running processes under `/proc`. This tree contains more than just files and directories. Simply by writing some data to the right file, you can do things like change the brightness of your screen.
 
 > If you try 'cat /boot/vmlinuz > /dev/dsp' (on a properly configured system) you should hear some sound on the speaker. That's the sound of your kernel! A file sent to /dev/lp0 gets printed. Sending data to and reading from /dev/ttyS0 will allow you to communicate with a device attached there - for instance, your modem.
 _from [The Linux Documentation Project][17]
 
-By reading files under `/proc`, you can find out [all kinds of things][18] about programs tht are currently running and you can change some of the kernel's behaviour at runtime. Point being, the file system _is an API_. You use it with standard tools like `ls`, `cat`, `echo`, `cp`, etc.
+By reading files under `/proc` you can find out [all kinds of things][18] about programs tht are currently running and you can change some of the kernel's behaviour at runtime. Point being, the file system _is an API_. You use it with standard tools like `ls`, `cat`, `echo`, `cp`, etc.
 
-That's the spirit of domfs. Just like `/proc` is exposing details about running processes, `/dom` exposes deatils about the html document currently loaded in your browsers. (It doesn't have to be `/dom` and it can be more than one document). Under this directory, you'll find the DOM elements of an HTML page. You have access to the html they contain (the `innerHTML`) and attribute values like `class`, `id` or `name`.
+That's the spirit of domfs. Just like `/proc` exposes details about running processes, `/dom` exposes details about the html document currently loaded in your browsers. (It doesn't have to be `/dom` and it can be more than one document). Under this directory, you'll find the DOM elements of an HTML page. You have access to the html they contain (the `innerHTML`) and attribute values like `class`, `id` or `name`.
 
 The beauty of this is that standard tools like `echo` and `cat` can now manipulate the DOM. That means thay can be used to play videos, display a CSS-styled UI or even turn database tables into 3D charts that you can walk through! Oh, the possibilites! You can also set up a couple of UI widgets from the comfort of your `~/.bashrc~` or `~/.zshrc`.
 
-Because your terminal emulator now is capable of displaying html and running Javascript, these widgets show up right on top of your terminal. No more alt-tabing, the GUI is where you are.
+Because your terminal emulator now is capable of displaying html and running Javascript, these widgets show up right on top of your terminal. No more alt-tabbing, the GUI is where you are.
 
 ### 
 
